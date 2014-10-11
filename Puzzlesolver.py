@@ -14,6 +14,8 @@
 #         pieces_that_fits_list = [[connection(a)list],...,[connection(d)list]]
 # This looks complex but the code will be simple (HOPEFULLY)
 
+# This Version of the script will attempt to find all the solutions
+
 # Rules of which side fits which side
 puzzle_relation={}
 
@@ -23,7 +25,15 @@ puzzle_pieces=[]
 # Advanced list of puzzle piece profiles
 adv_puzzle_pieces=[]
 
+# Iterative list
+four_piece_potential=[]
+
+# Solution List
+solutions=[]
+
 def create_adv_list():
+    
+    number_of_connections=0
     
     # Creates a adv_puzzle_piece for every puzzle piece
     for p_piece in puzzle_pieces:
@@ -45,18 +55,71 @@ def create_adv_list():
                 if puzzle_piece[0] != name:
                     for side in puzzle_piece[1]:
                         if side==relatedpiece:
-                            side_n_list.append(puzzle_piece[0])
+                            side_n_list.append(puzzle_piece)
+                            number_of_connections+=1
             connectionlist.append(side_n_list)
             
         # Append the adv_piece onto the adv list 
         adv_piece=[name,side1,side2,side3,side4,connectionlist]
         adv_puzzle_pieces.append(adv_piece)
-    return 0
+    return number_of_connections/2
 
+def to_right(num):
+    if num==4:
+        return 1
+    else:
+        return num+1
+    
+def to_left(num):
+    if num==1:
+        return 4
+    else:
+        return num-1
+
+def create_four_pieces():
+    for adv_piece in adv_puzzle_pieces:
+        for num in range(1,5):
+            side = adv_piece[num]
+            bottom = adv_piece[to_right(num)]
+            for right_piece in adv_piece[5][num]:
+                for bottom_piece in adv_piece[5][to_right(num)]:
+                    
+                    right_piece_num=0
+                    for j in range[1,5]:
+                        if right_piece[j] != puzzle_relation[side]:
+                            right_piece_num+=1
+                            
+                    bottom_piece_num=0
+                    for k in range[1,5]:
+                        if bottom_piece[k] != puzzle_relation[bottom]:
+                            bottom_piece_num+=1
+                            
+                    for bottom_right_piece in right_piece[5][to_left(right_piece_num)]:
+                        for right_bottom_piece in bottom_piece[5][to_right(bottom_piece_num)]:
+                            if bottom_right_piece == right_bottom_piece:
+                                potential_four=[[adv_piece[0],side,bottom],
+                                                [right_piece[to_left(right_piece_num)],
+                                                 right_piece[right_piece_num],
+                                                 right_piece[0]]
+                                                [bottom_piece_num[0],
+                                                 bottom_piece[bottom_piece_num],
+                                                 bottom_piece[to_right(bottom_piece_num)]]
+                                                [puzzle_relation[bottom_piece[to_right(bottom_piece_num)]],
+                                                 puzzle_relation[bottom_piece[to_right(bottom_piece_num)]],
+                                                 right_bottom_piece[0]]]
+                                four_piece_potential.append[potential]
+    return 0
+                                
 def solve_puzzle():
-    create_adv_list()
-    solution=[]
-    for
+    connection_num = create_adv_list()
+    number_of_elements = len(puzzle_pieces)
+    if connection_num < (2*number_of_elements**2 - 2*number_of_elements):
+        return "no solution"
+    create_four_pieces()
+    for new_piece in four_piece_potential:
+        c_potential_solution=[]
+        four_piece_possible = []
+        
     if length(adv_puzzle_pieces)==1:
         return solution
     return solve_puzzle
