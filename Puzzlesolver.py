@@ -97,16 +97,18 @@ def create_four_pieces():
                     for bottom_right_piece in right_piece[5][to_left(right_piece_num)]:
                         for right_bottom_piece in bottom_piece[5][to_right(bottom_piece_num)]:
                             if bottom_right_piece == right_bottom_piece:
-                                potential_four=[[adv_piece[0],side,bottom],
-                                                [right_piece[to_left(right_piece_num)],
+                                potential_four=[[[adv_piece[0],bottom,side],
+                                                [right_piece[0],
                                                  right_piece[right_piece_num],
-                                                 right_piece[0]]
+                                                 right_piece[to_left(right_piece_num)]]
                                                 [bottom_piece_num[0],
                                                  bottom_piece[bottom_piece_num],
                                                  bottom_piece[to_right(bottom_piece_num)]]
-                                                [puzzle_relation[bottom_piece[to_right(bottom_piece_num)]],
+                                                [right_bottom_piece[0]],
                                                  puzzle_relation[bottom_piece[to_right(bottom_piece_num)]],
-                                                 right_bottom_piece[0]]]
+                                                 puzzle_relation[right_piece[to_left(right_piece_num)]]]
+                                                adv_piece[to_right(to_right(num))]+bottom_piece[to_right(to_right(bottom_piece_num))],
+                                                adv_piece[to_left
                                 four_piece_potential.append[potential]
     return 0
                                 
@@ -116,9 +118,18 @@ def solve_puzzle():
     if connection_num < (2*number_of_elements**2 - 2*number_of_elements):
         return "no solution"
     create_four_pieces()
-    for new_piece in four_piece_potential:
+    for piece in four_piece_potential:
+        used_pieces = []
         c_potential_solution=[]
         four_piece_possible = []
+        
+        for smaller_piece in piece:
+            if smaller_piece[0] not in used_pieces:
+                used_pieces.append(smaller_piece[0])
+                four_piece_possible.append(piece)
+            
+            
+        
         
     if length(adv_puzzle_pieces)==1:
         return solution
