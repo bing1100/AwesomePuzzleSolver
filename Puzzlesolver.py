@@ -64,49 +64,70 @@ def create_adv_list():
         adv_puzzle_pieces.append(adv_piece)
     return number_of_connections/2
 
+# Helper function that loops right from 1 to 4 based on a number line
 def to_right(num):
     if num==4:
         return 1
     else:
         return num+1
-    
+ 
+# Helper function that loops left from 1 to 4 based on a number line  
 def to_left(num):
     if num==1:
         return 4
     else:
         return num-1
+    
+    
+# Creates a new puzzle piece with 4 of the smaller puzzle pieces
 
 def create_four_pieces():
+    
+    # Loops though all the puzzle pieces and looks for 4 piece combination pieces
     for adv_piece in adv_puzzle_pieces:
+        
+        # Loops through all 4 sides of the adv_piece and looks for different combinations
         for num in range(1,5):
+            
+            # Sets the side of the puzzle piece (right side)
             side = adv_piece[num]
+            # Sets the bottom of the puzzle piece
             bottom = adv_piece[to_right(num)]
+            
+            # Loops through all the pieces that can connect to the right side
             for right_piece in adv_piece[5][num]:
+                # Loops through all the pieces that can connect to the bottom
                 for bottom_piece in adv_piece[5][to_right(num)]:
                     
+                    # Finds the list placement of side connection for the pieces that connect to the right side
                     right_piece_num=0
                     for j in range[1,5]:
                         if right_piece[j] != puzzle_relation[side]:
                             right_piece_num+=1
-                            
+                    
+                    # Finds the list placement of the bottom connection for the pieces that connect to the bottom side        
                     bottom_piece_num=0
                     for k in range[1,5]:
                         if bottom_piece[k] != puzzle_relation[bottom]:
                             bottom_piece_num+=1
-                            
+                    
+                    # Looks for a piece that fits into the bottom right side to complete the square
                     for bottom_right_piece in right_piece[5][to_left(right_piece_num)]:
                         for right_bottom_piece in bottom_piece[5][to_right(bottom_piece_num)]:
+                            
+                            # If such a piece exists, creates a new puzzle piece with the same structure as the pieces in puzzle relation
                             if bottom_right_piece == right_bottom_piece:
-                                potential_four=[[[adv_piece[0],bottom,side],
-                                                [right_piece[0],
-                                                 right_piece[right_piece_num],
-                                                 right_piece[to_left(right_piece_num)]]
+                                potential_four=[[[adv_piece[0],
+                                                  bottom,side],
+                                                 [right_piece[0],
+                                                  right_piece[right_piece_num],
+                                                  right_piece[to_left(right_piece_num)]]
                                                 [bottom_piece_num[0],
                                                  bottom_piece[bottom_piece_num],
                                                  bottom_piece[to_right(bottom_piece_num)]]
                                                 [right_bottom_piece[0]],
-                                                 puzzle_relation[bottom_piece[to_right(bottom_piece_num)]],
-                                                 puzzle_relation[right_piece[to_left(right_piece_num)]]]
+                                                puzzle_relation[bottom_piece[to_right(bottom_piece_num)]],
+                                                puzzle_relation[right_piece[to_left(right_piece_num)]]],
                                                 adv_piece[to_right(to_right(num))]+bottom_piece[to_right(to_right(bottom_piece_num))],
                                                 adv_piece[to_left
                                 four_piece_potential.append[potential]
@@ -127,9 +148,15 @@ def solve_puzzle():
             if smaller_piece[0] not in used_pieces:
                 used_pieces.append(smaller_piece[0])
                 four_piece_possible.append(piece)
+                
+                update_adv_puzzle_pieces()
+                update_relation()
             
-            
-        
+        if len(four_piece_possible) != 4:
+            break
+        puzzle_pieces = four_piece_possible
+        update_adc_puzzle_pieces()
+        update_puzzle_relation()
         
     if length(adv_puzzle_pieces)==1:
         return solution
