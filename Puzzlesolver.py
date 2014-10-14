@@ -1,3 +1,5 @@
+import math
+
 # Goal of this Code: Lets Solve Puzzles!
 
 # The Rules:
@@ -30,6 +32,9 @@ four_piece_potential=[]
 
 # Solution List
 solutions=[]
+
+# connection_num
+connection_num = 0
 
 def create_adv_list():
     
@@ -83,6 +88,8 @@ def to_left(num):
 
 def create_four_pieces():
     
+    num=0
+    
     # Loops though all the puzzle pieces and looks for 4 piece combination pieces
     for adv_piece in adv_puzzle_pieces:
         
@@ -117,6 +124,13 @@ def create_four_pieces():
                             
                             # If such a piece exists, creates a new puzzle piece with the same structure as the pieces in puzzle relation
                             if bottom_right_piece == right_bottom_piece:
+                                
+                                # Finds the list placement of the bottom right connection for the pieces that connect to the bottom side        
+                                bottom_right_piece_num=0
+                                for k in range[1,5]:
+                                    if bottom_right_piece[k] != puzzle_relation[bottom]:
+                                        bottom_right_piece_num+=1                                
+                                
                                 potential_four=[[[adv_piece[0],
                                                   bottom,side],
                                                  [right_piece[0],
@@ -128,39 +142,75 @@ def create_four_pieces():
                                                 [right_bottom_piece[0]],
                                                 puzzle_relation[bottom_piece[to_right(bottom_piece_num)]],
                                                 puzzle_relation[right_piece[to_left(right_piece_num)]]],
-                                                adv_piece[to_right(to_right(num))]+bottom_piece[to_right(to_right(bottom_piece_num))],
-                                                adv_piece[to_left
-                                four_piece_potential.append[potential]
+                                                
+                                                adv_piece[to_right(to_right(num))]+bottom_piece[to_left(bottom_piece_num)],
+                                                right_piece[to_right(right_piece_num)]+adv_piece[to_left(num)],
+                                                bottom_right_piece[to_right(bottom_right_piece_num)]+right_piece[to_right(to_right(right_piece_num))],
+                                                bottom_right_piece[to_right(to_right(bottom_right_piece_num))]+bottom_piece[to_right(to_right(bottom_piece_num))]]
+                                
+                                num+=1
+                                                            
+                                four_piece_potential.append[potential_four]
+    return num
+
+
+def update_relation():
+    for key1 in puzzle_solution.keys():
+        for key2 in puzzle_solution.keys():
+            puzzle_solution[key1+key2]=puzzle_solution[key1]+puzzle_solution[key2]
     return 0
+        
                                 
 def solve_puzzle():
-    connection_num = create_adv_list()
+    
+    # records the solutions
+    solutions=[]
     number_of_elements = len(puzzle_pieces)
-    if connection_num < (2*number_of_elements**2 - 2*number_of_elements):
+    
+    # Finds the number of 4 pieces
+    num = create_four_pieces()
+    
+    # If puzzle only has one piece
+    if num == 1:
+        return "only 1 piece"
+    
+    # If puzzle has less than 
+    if math.sqrt(num)%2 != 0:
         return "no solution"
+    
+    create_adv_list()
     create_four_pieces()
+    
     for piece in four_piece_potential:
         used_pieces = []
-        c_potential_solution=[]
-        four_piece_possible = []
+        adv_puzzle_pieces=[]
+        four_piece_possible=[]
         
-        for smaller_piece in piece:
-            if smaller_piece[0] not in used_pieces:
-                used_pieces.append(smaller_piece[0])
-                four_piece_possible.append(piece)
-                
-                update_adv_puzzle_pieces()
-                update_relation()
+        
+        
+        while(len(adv_puzzle_pieces!=1)):
             
-        if len(four_piece_possible) != 4:
-            break
-        puzzle_pieces = four_piece_possible
-        update_adc_puzzle_pieces()
-        update_puzzle_relation()
-        
-    if length(adv_puzzle_pieces)==1:
-        return solution
-    return solve_puzzle
+            for smaller_piece in piece[0]:
+                if smaller_piece[0] in used_pieces:
+                    break
+                used_pieces.append(smaller_piece[0])
+                four_piece_possible.append(smaller_piece)
+            if len(four_piece_possible)%4!=0:
+                    break
+                
+                
+                puzzle_pieces = four_piece_possible
+                update_puzzle_relation()
+                connection_num=update_adv_puzzle_pieces()
+                
+                
+                if connection_num < (2*number_of_elements**2 - 2*number_of_elements):
+                    break      
+                
+            if length(adv_puzzle_pieces)==1:
+                solutions.append(adv_puzzle_pieces[0][0])
+                
+    return solutions
     
 
 # Gets the basic info for the puzzle through user input
