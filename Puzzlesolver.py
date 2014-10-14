@@ -36,6 +36,9 @@ solutions=[]
 # connection_num
 connection_num = 0
 
+# puzzle combinations done already
+finished_combinations = []
+
 def create_adv_list():
     
     number_of_connections=0
@@ -186,16 +189,42 @@ def solve_puzzle():
         adv_puzzle_pieces=[]
         four_piece_possible=[]
         
+        # Adds the starting element to four_piece_possible
+        four_piece_possible.append(piece)
+        for smaller_piece in piece[0]:
+            used_pieces.append(smaller_piece)
         
+        # populates the four_piece_possible list
+        for piece_1 in four_piece_potential:
+            for smaller_piece_1 in piece_1[0]:      
+                vtrue = 1   
+                if smaller_piece_1[0] in used_pieces:
+                    vtrue = 0
+                else:
+                    used_pieces.append(smaller_piece_1[0])
+            if vtrue == 1:
+                four_piece_possible.append(piece_1)
+             
         
-        while(len(adv_puzzle_pieces!=1)):
+        # Stops calculations if the four_piece_possible combination was already done before
+        vtrue_2 = 1 
+        for four_potential in finished_combinations:
+            if four_potential[0] != len(four_piece_possible):
+                for smaller_1 in four_piece_possible:
+                    if smaller_1 not in four_potential[1]:
+                        vtrue_2 = 0
+                        break
+            if vtrue_2 == 0:
+                break
+        if vtrue_2 == 1:
             
-            for smaller_piece in piece[0]:
-                if smaller_piece[0] in used_pieces:
-                    break
-                used_pieces.append(smaller_piece[0])
-                four_piece_possible.append(smaller_piece)
-            if len(four_piece_possible)%4!=0:
+            # Adds the combination to the list of done combinations
+            finished_combinations.append([len(four_piece_possible),four_piece_possible])
+            
+            while(len(adv_puzzle_pieces!=1)):
+                
+                
+                if len(four_piece_possible)%4!=0:
                     break
                 
                 
@@ -207,8 +236,8 @@ def solve_puzzle():
                 if connection_num < (2*number_of_elements**2 - 2*number_of_elements):
                     break      
                 
-            if length(adv_puzzle_pieces)==1:
-                solutions.append(adv_puzzle_pieces[0][0])
+                if length(adv_puzzle_pieces)==1:
+                    solutions.append(adv_puzzle_pieces[0][0])
                 
     return solutions
     
