@@ -36,11 +36,10 @@ solutions=[]
 # connection_num
 connection_num = 0
 
-# puzzle combinations done already
-finished_combinations = []
 
 def create_adv_list():
     
+    # Records the total number of connections that are possible throughout the puzzle
     number_of_connections=0
     
     # Creates a adv_puzzle_piece for every puzzle piece
@@ -70,7 +69,10 @@ def create_adv_list():
         # Append the adv_piece onto the adv list 
         adv_piece=[name,side1,side2,side3,side4,connectionlist]
         adv_puzzle_pieces.append(adv_piece)
+        
+        # Divide by 2 because of handshake lemma
     return number_of_connections/2
+
 
 # Helper function that loops right from 1 to 4 based on a number line
 def to_right(num):
@@ -78,6 +80,7 @@ def to_right(num):
         return 1
     else:
         return num+1
+ 
  
 # Helper function that loops left from 1 to 4 based on a number line  
 def to_left(num):
@@ -88,9 +91,9 @@ def to_left(num):
     
     
 # Creates a new puzzle piece with 4 of the smaller puzzle pieces
-
 def create_four_pieces():
     
+    # Num is the number of 4 piece combo pieces
     num=0
     
     # Loops though all the puzzle pieces and looks for 4 piece combination pieces
@@ -157,32 +160,37 @@ def create_four_pieces():
     return num
 
 
+# puzzle_relation updater, adds higher level relations
 def update_relation():
     for key1 in puzzle_solution.keys():
         for key2 in puzzle_solution.keys():
             puzzle_solution[key1+key2]=puzzle_solution[key1]+puzzle_solution[key2]
     return 0
         
-                                
+        
+# Main puzzle Solver
 def solve_puzzle():
     
-    # records the solutions
-    solutions=[]
+    create_adv_list()
     number_of_elements = len(puzzle_pieces)
     
     # Finds the number of 4 pieces
     num = create_four_pieces()
     
-    # If puzzle only has one piece
+    # If there is only has one 4 piece combo piece
     if num == 1:
-        return "only 1 piece"
+        return four_piece_potential[0][0]
+    
+    # If puzzle has no combo pieces than no solution in thread
+    if num == 0:
+        return "oh crap, no solution"
     
     # If puzzle has less than 
     if math.sqrt(num)%2 != 0:
-        return "no solution"
+        return "no solution for this solution thread(Yet to be programmed)"
     
-    create_adv_list()
-    create_four_pieces()
+    # puzzle combinations done already
+    finished_combinations = []    
     
     for piece in four_piece_potential:
         used_pieces = []
@@ -221,24 +229,23 @@ def solve_puzzle():
             # Adds the combination to the list of done combinations
             finished_combinations.append([len(four_piece_possible),four_piece_possible])
             
-            while(len(adv_puzzle_pieces!=1)):
+            while(len(four_piece_potential)!=1):
                 
-                
+                # Not of the solvable form, break operation
                 if len(four_piece_possible)%4!=0:
                     break
                 
-                
+                # Updates the variables for the next stage recursion
                 puzzle_pieces = four_piece_possible
                 update_puzzle_relation()
                 connection_num=update_adv_puzzle_pieces()
                 
-                
+                # If statement true, no solution exists, break operation
                 if connection_num < (2*number_of_elements**2 - 2*number_of_elements):
                     break      
                 
-                if length(adv_puzzle_pieces)==1:
-                    solutions.append(adv_puzzle_pieces[0][0])
-                
+                # applys the recursion to solve the puzzle and appends the solved puzzles to the solutions 
+                solutions.append(solve_puzzle)   
     return solutions
     
 
@@ -271,4 +278,5 @@ def create_databank():
         puzzle_pieces.append(element)
     return solve_puzzle()
         
+# Starts the program        
 create_databank()
