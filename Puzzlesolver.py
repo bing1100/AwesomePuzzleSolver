@@ -1,5 +1,7 @@
 import math
 
+# Currently only solves 2n * 2n jigsaw puzzles, no edge pieces. 
+
 # Goal of this Code: Lets Solve Puzzles!
 
 # The Rules:
